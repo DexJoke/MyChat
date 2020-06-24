@@ -8,6 +8,6 @@
 
 import Foundation
 
-class Constant {
-    
+class UserDefaultKey {
+    static let isLogin = "isLogin"
 }

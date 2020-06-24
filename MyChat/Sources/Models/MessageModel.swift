@@ -7,3 +7,23 @@
 //
 
 import Foundation
+
+enum MessageCellIdentifiers: String {
+    case SenderText
+    case SenderImage
+    case MyText
+    case MyImage
+    
+    func value() -> String {
+        switch self {
+        case .SenderText : return "senderText"
+        case .SenderImage : return "senderImage"
+        case .MyText : return "myText"
+        case .MyImage : return "myImage"
+        }
+    }
+}
+
+protocol MessageModel {
+    func getIdentifier() -> MessageCellIdentifiers
+}

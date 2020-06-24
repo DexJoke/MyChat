@@ -8,17 +8,18 @@
 
 import UIKit
 
-class SenderMessageCell: UITableViewCell {
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+class SenderTextMessageViewCell: MessageTableViewCell {
+    @IBOutlet weak var txtMessage: UILabel!
+    @IBOutlet weak var bgMessage: UIImageView!
+    @IBOutlet weak var imgAvatar: UIImageView!
+    
+    override func fillData(data: MessageModel) {
+        guard let model = data as? TextMessageModel else {
+            return
+        }
+        
+        self.txtMessage.text = model.message
+        self.bgMessage.image = UIImage(named: model.bgMessage)
+        self.imgAvatar.image = UIImage(named: model.imgAvatar)
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
 }

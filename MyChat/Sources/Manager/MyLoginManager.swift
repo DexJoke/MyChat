@@ -10,59 +10,75 @@ import Foundation
 import FBSDKLoginKit
 import GoogleSignIn
 import AuthenticationServices
+import Firebase
 
-class MyLoginManager: NSObject {
-    weak var window: UIWindow!
+protocol ArtboardPresenterDelegate {
+    func onLoginSuccess()
+    func onLoginFail(error: String)
+    func onStrartLogin()
+}
+
+class ArtboardPresenter: NSObject {
+    private var delegate: ArtboardPresenterDelegate!
+    private let facebookPermissions = ["public_profile", "email", "user_friends", "user_birthday", "user_gender"]
+    private let clientID = "480771188801-hjpc6trq7phlu6fmlv50idqppbjpstfh.apps.googleusercontent.com"
     
-    public func loginFacebook(vc: UIViewController) {
-        let fb = FBSDKLoginKit.LoginManager()
-        fb.logOut()
-        fb.logIn(permissions: ["public_profile", "email", "user_friends", "user_birthday", "user_gender"], from: vc, handler: { [weak self] (result: LoginManagerLoginResult?, error: Error?)  in
-            self!.result(result: result, error: error)
-        })
+    init(delegate: ArtboardPresenterDelegate) {
+        self.delegate = delegate
     }
     
-    public func googleLogin(window: UIWindow) {
-        self.window = window
-        GIDSignIn.sharedInstance().clientID = "480771188801-hjpc6trq7phlu6fmlv50idqppbjpstfh.apps.googleusercontent.com"
+    public func facebookLogin() {
+        guard let vc = delegate as? UIViewController else {
+            return
+        }
+        
+        let fb = FBSDKLoginKit.LoginManager()
+        fb.logIn(permissions: facebookPermissions, from: vc, handler: handleFacebookLogin)
+    }
+    
+    public func googleLogin() {
+        guard let vc = delegate as? UIViewController else {
+            return
+        }
+        
+        GIDSignIn.sharedInstance().clientID = clientID
         GIDSignIn.sharedInstance().delegate = self
-//        GIDSignIn.sharedInstance()?.presentingViewController = self
+        GIDSignIn.sharedInstance()?.presentingViewController = vc
         GIDSignIn.sharedInstance()?.restorePreviousSignIn()
         GIDSignIn.sharedInstance()?.signIn()
     }
     
-    func result(result: LoginManagerLoginResult?, error: Error?) {
+    private func handleFacebookLogin(result: LoginManagerLoginResult?, error: Error?) {
         if error != nil {
-            // do something
-            return
+            delegate.onLoginFail(error: error.debugDescription)
+        } else {
+            let credential = FacebookAuthProvider.credential(withAccessToken: AccessToken.current!.tokenString)
+            self.authenWithFirebase(credential: credential)
         }
-        
-        print(result!.declinedPermissions)
-        getGraphRequest()
     }
     
-    func getGraphRequest() {
-        let graphRequest : GraphRequest = GraphRequest(graphPath: "me", parameters: ["fields":"email"])
-        graphRequest.start { (connection, result, error) in
+    private func authenWithFirebase(credential: AuthCredential) {
+        delegate.onStrartLogin()
+        Auth.auth().signIn(with: credential) { (authResult, error) in
             if error != nil {
-                return
+                self.delegate.onLoginFail(error: error.debugDescription)
+            } else {
+                self.delegate.onLoginSuccess()
             }
-            
-            let res = result as! [String:Any]
-            print("res=\(res)")
-            
         }
-    }
-}
-extension MyLoginManager: GIDSignInDelegate {
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        
     }
 }
 
-extension MyLoginManager: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
-    @available(iOS 13.0, *)
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return self.window!
+
+// MARK: GIDSignInDelegate
+extension ArtboardPresenter: GIDSignInDelegate {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if error != nil {
+            delegate.onLoginFail(error: error.debugDescription)
+        } else {
+            guard let authentication = user.authentication else { return }
+            let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken, accessToken: authentication.accessToken)
+            authenWithFirebase(credential: credential)
+        }
     }
 }

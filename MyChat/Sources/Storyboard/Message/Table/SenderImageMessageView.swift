@@ -8,17 +8,17 @@
 
 import UIKit
 
-class SenderImageMessageView: UITableViewCell {
+class SenderImageMessageView: MessageTableViewCell {
+    @IBOutlet weak var imgAvatar: UIImageView!
+    @IBOutlet weak var imgMessage: UIImageView!
+    
+    override func fillData(data: MessageModel) {
+        guard let model = data as?  ImageMessageModel else{
+            return
+        }
+        
+        self.imgAvatar.image = UIImage(named: model.imgAvatar)
+        self.imgMessage.image = UIImage(named: model.imgMessage)
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
 }

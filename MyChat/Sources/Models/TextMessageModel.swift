@@ -8,12 +8,14 @@
 
 import UIKit
 
-class TextMessageModel: MessageModel {
+struct TextMessageModel: MessageModel {
     var imgAvatar: String!
     var bgMessage: String!
     var time: String!
+    var message: String!
+    
     var identifier: MessageCellIdentifiers!
-
+    
     func getIdentifier() -> MessageCellIdentifiers {
         return self.identifier
     }

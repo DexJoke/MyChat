@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MIBlurPopup
 
 class PopupViewController: UIViewController {
 
@@ -25,7 +26,7 @@ class PopupViewController: UIViewController {
         }
     }
     
-    var customBlurEffectStyle: UIBlurEffectStyle!
+    var customBlurEffectStyle: UIBlurEffect.Style!
     var customInitialScaleAmmount: CGFloat!
     var customAnimationDuration: TimeInterval!
     
@@ -57,16 +58,16 @@ extension PopupViewController: MIBlurPopupDelegate {
         return popupContentContainerView ?? UIView()
     }
     
-    var blurEffectStyle: UIBlurEffectStyle {
-        return customBlurEffectStyle
+    var blurEffectStyle: UIBlurEffect.Style {
+        return .dark
     }
     
     var initialScaleAmmount: CGFloat {
-        return customInitialScaleAmmount
+        return 0.5
     }
     
     var animationDuration: TimeInterval {
-        return customAnimationDuration
+        return 0.5
     }
     
 }

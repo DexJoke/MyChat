@@ -7,3 +7,19 @@
 //
 
 import Foundation
+
+class UserManager {
+    static let instance  = UserManager()
+    
+    func isLogin() -> Bool {
+        return UserDefaults.standard.bool(forKey: UserDefaultKey.isLogin)
+    }
+    
+    func logged() {
+        UserDefaults.standard.set(true, forKey: UserDefaultKey.isLogin)
+    }
+    
+    func logout() {
+        UserDefaults.standard.removeObject(forKey: UserDefaultKey.isLogin)
+    }
+}
