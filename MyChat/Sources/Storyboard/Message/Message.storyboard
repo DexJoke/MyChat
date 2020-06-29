@@ -42,7 +42,7 @@
                                                         <constraint firstAttribute="width" secondItem="zUn-f6-Ubj" secondAttribute="height" multiplier="1:1" id="cxZ-h8-707"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_left_top_message" translatesAutoresizingMaskIntoConstraints="NO" id="aN5-nz-s8N">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_left_center_message" translatesAutoresizingMaskIntoConstraints="NO" id="aN5-nz-s8N">
                                                     <rect key="frame" x="61" y="10" width="62" height="41"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r62-V3-Wpz">
@@ -135,7 +135,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ng5-Sh-OIg">
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="70"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_left_top_message" translatesAutoresizingMaskIntoConstraints="NO" id="wfT-tg-PwH">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_right_center_message" translatesAutoresizingMaskIntoConstraints="NO" id="wfT-tg-PwH">
                                                             <rect key="frame" x="342" y="10" width="62" height="50"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dje-eC-mhr">
@@ -238,6 +238,9 @@
                                             <constraint firstAttribute="height" constant="26" id="sqZ-yI-hS2"/>
                                         </constraints>
                                         <state key="normal" image="bg_button_send"/>
+                                        <connections>
+                                            <action selector="handleSendMessage:" destination="Kpr-ng-JZm" eventType="touchUpInside" id="zjI-RO-LUf"/>
+                                        </connections>
                                     </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_message" translatesAutoresizingMaskIntoConstraints="NO" id="RLZ-x7-jPO">
                                         <rect key="frame" x="73" y="0.0" width="298" height="32"/>
@@ -288,6 +291,7 @@
                     <navigationItem key="navigationItem" id="Ike-hA-Krt"/>
                     <connections>
                         <outlet property="constraintsBottomButtonViewContainer" destination="2w4-3B-48U" id="6Ll-wd-jBW"/>
+                        <outlet property="editMessage" destination="c67-tm-pmI" id="Cmb-BJ-gwm"/>
                         <outlet property="tblMessage" destination="WvF-kn-HoU" id="UZN-rW-UzM"/>
                     </connections>
                 </viewController>
@@ -318,9 +322,10 @@
         <image name="bg_button_send" width="27.5" height="26"/>
         <image name="bg_message" width="27.5" height="32"/>
         <image name="ic_flipped_background" width="405.5" height="720.5"/>
-        <image name="ic_left_top_message" width="24.5" height="22.5"/>
+        <image name="ic_left_center_message" width="11" height="19.5"/>
         <image name="ic_normal_camera" width="25" height="24"/>
         <image name="ic_normal_gallery" width="25" height="24"/>
+        <image name="ic_right_center_message" width="38.5" height="38.5"/>
         <image name="img_test2" width="150" height="200"/>
     </resources>
 </document>

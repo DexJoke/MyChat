@@ -7,15 +7,18 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseFirestore
 
 class MessageVC: BaseVC {
     @IBOutlet weak var tblMessage: UITableView!
-    
     @IBOutlet weak var constraintsBottomButtonViewContainer: NSLayoutConstraint!
+    @IBOutlet weak var editMessage: UITextField!
     
     override var isEnableBack: Bool { return false }
     override var isExistNavi: Bool { return false }
-    let data: [MessageModel] = MockData.messages()
+    var chatManager: ChatManager!
+    var listMessage: [BaseMessageModel] = []
     
     static func create() -> MessageVC {
         return ViewUtils.loadStoryboardVC(storyboard: "Message", identifier: "MessageVC")
@@ -25,52 +28,67 @@ class MessageVC: BaseVC {
         super.viewDidLoad()
         self.tblMessage.delegate = self
         self.tblMessage.dataSource = self
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyBoardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyBoardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        chatManager = ChatManager(delegate: self)
+        chatManager.loadOldMessage()
     }
     
-    @objc func keyBoardWillShow(notification: NSNotification) {
-        handleKeyboardChange(notification)
+    @IBAction func handleSendMessage(_ sender: Any) {
+        if let message = editMessage.text {
+            chatManager.sendMessage(message: message)
+        }
     }
     
-    @objc func keyBoardWillHide(notification: NSNotification) {
-        handleKeyboardChange(notification)
+    override func keyboardChange(_ isShow: Bool, _ heightKeyboard: Float, _ heightTabBar: Float, _ heighSafeArea: Float) {
+        let contrainsUpdate = heightKeyboard - heighSafeArea - heightTabBar
+        constraintsBottomButtonViewContainer.constant = CGFloat(isShow ? contrainsUpdate : 0)
     }
     
-    private func handleKeyboardChange(_ notification: NSNotification) {
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
-               return
-           }
-
-           let keyboardHeight: CGFloat
-           if #available(iOS 11.0, *) {
-               keyboardHeight = keyboardFrame.cgRectValue.height - self.view.safeAreaInsets.bottom
-           } else {
-               keyboardHeight = keyboardFrame.cgRectValue.height
-           }
-        
-        let duration:TimeInterval = (notification.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-        let isShowing = notification.name == UIResponder.keyboardWillShowNotification
-        constraintsBottomButtonViewContainer.constant = isShowing ? keyboardHeight : 0
-
-        UIView.animate(withDuration: duration, delay: TimeInterval(0),animations: { self.view.layoutIfNeeded()
-        })
+    private func scrollToLastItem() {
+        tblMessage.scrollToRow(at: IndexPath(item: listMessage.count - 1, section: 0), at: .bottom, animated: true)
     }
 }
 
 extension MessageVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        return listMessage.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = data[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: item.getIdentifier().value()) as! MessageTableViewCell
-        print(item.getIdentifier().value())
+        let item = listMessage[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: item.getIdentifier().rawValue) as! MessageTableViewCell
         cell.fillData(data: item)
         return cell
     }
+}
+
+extension MessageVC: ChatManagerDelegate {
+    func onLoadOldMessages(messages: [BaseMessageModel]) {
+        self.listMessage = messages
+        tblMessage.reloadData()
+        chatManager.registerListener()
+        scrollToLastItem()
+    }
     
+    func onIncomingMessages(message: BaseMessageModel) {
+        listMessage.append(message)
+        tblMessage.insertRows(at: [IndexPath(item: listMessage.count - 1, section: 0)], with: .top)
+        scrollToLastItem()
+    }
+    
+    func onSendMessageSuccess(message: BaseMessageModel) {
+        
+    }
+    
+    func onSendMessageFailed(message: BaseMessageModel) {
+        
+    }
+    
+    func onMemberJoin(name: String) {
+        
+    }
+    
+    func onMemberOut(name: String) {
+        
+    }
     
 }

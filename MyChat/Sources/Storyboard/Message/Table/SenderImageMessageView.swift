@@ -12,13 +12,10 @@ class SenderImageMessageView: MessageTableViewCell {
     @IBOutlet weak var imgAvatar: UIImageView!
     @IBOutlet weak var imgMessage: UIImageView!
     
-    override func fillData(data: MessageModel) {
+    override func fillData(data: BaseMessageModel) {
         guard let model = data as?  ImageMessageModel else{
             return
         }
-        
-        self.imgAvatar.image = UIImage(named: model.imgAvatar)
-        self.imgMessage.image = UIImage(named: model.imgMessage)
 
     }
 }

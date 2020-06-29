@@ -104,6 +104,7 @@ extension RegisterVC: PickerImageDelegate {
     func didSelect(image: UIImage) {
         self.pickerImage.dismiss()
         imgAvatar.image = image.resize(size: CGSize(width: 100, height: 100))
+        
     }
     
     func didCancle() {

@@ -7,12 +7,30 @@
 //
 
 import Foundation
+import SwiftyJSON
 
-struct ImageMessageModel: MessageModel {
-    var imgAvatar: String!
+class ImageMessageModel: BaseMessageModel, JsonParse {
+    var receiverName: String
+    var avatarURL: String!
     var time: String!
-    var imgMessage: String!
+    var imageURL: String!
     var identifier: MessageCellIdentifiers!
+    
+    init(json: JSON, identifier: MessageCellIdentifiers) {
+        self.receiverName = json["receiverName"].stringValue
+        self.avatarURL = json["avatarUrl"].stringValue
+        self.time = json["time"].stringValue
+        self.imageURL = json["message"].stringValue
+        self.identifier = identifier
+    }
+    
+    required init(json: JSON) {
+        self.receiverName = json["receiverName"].stringValue
+        self.avatarURL = json["avatarUrl"].stringValue
+        self.time = json["time"].stringValue
+        self.imageURL = json["message"].stringValue
+        self.identifier = MessageCellIdentifiers(rawValue: json["identifier"].stringValue)
+    }
     
     func getIdentifier() -> MessageCellIdentifiers {
         return self.identifier

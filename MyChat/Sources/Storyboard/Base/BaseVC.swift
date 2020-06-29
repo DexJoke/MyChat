@@ -22,6 +22,8 @@ class BaseVC: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyBoardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyBoardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,6 +51,42 @@ class BaseVC: UIViewController, UIGestureRecognizerDelegate {
         self.enableSwipeBack()
         self.hasViewDidAppear = true
     }
+    
+    @objc func keyBoardWillShow(notification: NSNotification) {
+        handleKeyboardChange(notification)
+    }
+    
+    @objc func keyBoardWillHide(notification: NSNotification) {
+        handleKeyboardChange(notification)
+    }
+    
+    private func handleKeyboardChange(_ notification: NSNotification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+        
+        let keyboardHeight: CGFloat = keyboardFrame.cgRectValue.height
+        var heighSafeArea: CGFloat
+        let heightTabbar = (self.tabBarController != nil ? self.tabBarController?.tabBar.frame.size.height : 0)!
+        if #available(iOS 11.0, *) {
+            heighSafeArea = self.view.safeAreaInsets.bottom
+        } else {
+            heighSafeArea = 0
+        }
+        
+        let duration:TimeInterval = (notification.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+        let isShowing = notification.name == UIResponder.keyboardWillShowNotification
+        
+        keyboardChange(isShowing, Float(keyboardHeight), Float(heightTabbar), Float(heighSafeArea))
+        
+        UIView.animate(withDuration: duration, delay: TimeInterval(0),animations: { self.view.layoutIfNeeded()
+        })
+    }
+    
+    func keyboardChange(_ isShow: Bool,_ heightKeyboard: Float,_ heightTabBar: Float, _ heighSafeArea: Float) {
+        
+    }
+    
     
     func createBackButton() {
         if (navigationController?.viewControllers.count ?? 0) <= 1 && navigationController?.topViewController == self {

@@ -9,7 +9,7 @@
 import UIKit
 
 class MessageTableViewCell: UITableViewCell {
-    func fillData(data: MessageModel) {
+    func fillData(data: BaseMessageModel) {
         //overrider
     }
 }

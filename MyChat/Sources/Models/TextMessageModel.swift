@@ -7,14 +7,31 @@
 //
 
 import UIKit
+import SwiftyJSON
 
-struct TextMessageModel: MessageModel {
-    var imgAvatar: String!
+class TextMessageModel: BaseMessageModel, JsonParse {
+    var receiverName: String!
+    var avatarURL: String!
     var bgMessage: String!
     var time: String!
     var message: String!
-    
     var identifier: MessageCellIdentifiers!
+    
+    required init(json: JSON) {
+        self.receiverName = json["receiverName"].stringValue
+        self.avatarURL = json["avatarUrl"].stringValue
+        self.time = json["time"].stringValue
+        self.message = json["message"].stringValue
+        self.identifier = MessageCellIdentifiers(rawValue: json["identifier"].stringValue)
+    }
+    
+    init(json: JSON, identifier: MessageCellIdentifiers) {
+        self.receiverName = json["receiverName"].stringValue
+        self.avatarURL = json["avatarUrl"].stringValue
+        self.time = json["time"].stringValue
+        self.message = json["message"].stringValue
+        self.identifier = identifier
+    }
     
     func getIdentifier() -> MessageCellIdentifiers {
         return self.identifier

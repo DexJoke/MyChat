@@ -11,11 +11,10 @@ import UIKit
 class MyImageMessageViewCell: MessageTableViewCell {
     @IBOutlet weak var imgMessage: UIImageView!
     
-    override func fillData(data: MessageModel) {
+    override func fillData(data: BaseMessageModel) {
         guard let model = data as?  ImageMessageModel else{
             return
         }
         
-        self.imgMessage.image = UIImage(named: model.imgMessage)
     }
 }

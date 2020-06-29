@@ -12,12 +12,10 @@ class MyTextMessageViewCell: MessageTableViewCell {
     @IBOutlet weak var message: UILabel!
     @IBOutlet weak var bgMessage: UIImageView!
     
-    override func fillData(data: MessageModel) {
+    override func fillData(data: BaseMessageModel) {
         guard let model = data as? TextMessageModel else{
             return
         }
-        
-        self.message.text = model.message
-        self.bgMessage.image = UIImage(named: model.bgMessage)
+        message.text = model.message
     }
 }

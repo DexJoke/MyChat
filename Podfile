@@ -11,5 +11,8 @@ target 'MyChat' do
   pod 'MIBlurPopup', '~> 0.2.0'
   pod 'Firebase/Auth'
   pod 'Firebase/Storage'
+  pod 'Firebase/Firestore'
+  pod 'FirebaseFirestoreSwift'
+  pod 'SwiftyJSON', '~> 4.3.0'
 
 end

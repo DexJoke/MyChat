@@ -29,6 +29,8 @@ class LoginPresenter {
             if error != nil {
                 self!.handleError(error: error! as NSError)
             } else {
+                UserManager.instance.saveUserName(email)
+                
                 self!.delegate.onLoginSusscess()
             }
         }

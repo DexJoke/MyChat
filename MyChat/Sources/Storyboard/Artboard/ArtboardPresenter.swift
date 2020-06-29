@@ -72,6 +72,11 @@ class ArtboardPresenter: NSObject {
 
 // MARK: GIDSignInDelegate
 extension ArtboardPresenter: GIDSignInDelegate {
+    private func saveProfileUser(user: GIDGoogleUser!) {
+        UserManager.instance.saveUserName(user.profile.name ?? "")
+        UserManager.instance.saveAvatarUrl(user.profile.imageURL(withDimension: 100)?.absoluteString ?? "")
+    }
+    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if user == nil {
             return
@@ -81,6 +86,8 @@ extension ArtboardPresenter: GIDSignInDelegate {
             delegate.onLoginFail(error: error.debugDescription)
         } else {
             guard let authentication = user.authentication else { return }
+            
+            saveProfileUser(user: user)
             let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken, accessToken: authentication.accessToken)
             authenWithFirebase(credential: credential)
         }
