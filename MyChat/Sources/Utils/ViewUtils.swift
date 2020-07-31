@@ -19,6 +19,10 @@ class ViewUtils {
         return storyboard.instantiateInitialViewController() as! Type
     }
     
+    static func loadNib<T>(name: String) -> T {
+        return UINib(nibName: name, bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! T
+    }
+    
     static func changeRootVC(vc: UIViewController) {
         AppDelegate.shared.window!.rootViewController = vc
     }

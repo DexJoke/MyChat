@@ -8,11 +8,12 @@ target 'MyChat' do
   pod 'FBSDKLoginKit'
   pod 'GoogleSignIn'
   pod 'JGProgressHUD'
-  pod 'MIBlurPopup', '~> 0.2.0'
   pod 'Firebase/Auth'
   pod 'Firebase/Storage'
   pod 'Firebase/Firestore'
   pod 'FirebaseFirestoreSwift'
   pod 'SwiftyJSON', '~> 4.3.0'
-
+  pod 'SDWebImage', '~> 5.0'
+  pod 'SideMenu', '~> 6.0'
+  pod 'SnapKit', '~> 5.0.0'
 end

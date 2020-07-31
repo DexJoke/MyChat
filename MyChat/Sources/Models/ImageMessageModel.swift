@@ -9,27 +9,21 @@
 import Foundation
 import SwiftyJSON
 
-class ImageMessageModel: BaseMessageModel, JsonParse {
-    var receiverName: String
+class ImageMessageModel: BaseMessageModel {
+    var receiverName: String!
     var avatarURL: String!
+    var bgMessage: String!
     var time: String!
-    var imageURL: String!
+    var data: String!
     var identifier: MessageCellIdentifiers!
+    var type: MessageType!
     
     init(json: JSON, identifier: MessageCellIdentifiers) {
-        self.receiverName = json["receiverName"].stringValue
+        self.receiverName = json["sender"]["name"].stringValue
         self.avatarURL = json["avatarUrl"].stringValue
         self.time = json["time"].stringValue
-        self.imageURL = json["message"].stringValue
+        self.data = json["data"].stringValue
         self.identifier = identifier
-    }
-    
-    required init(json: JSON) {
-        self.receiverName = json["receiverName"].stringValue
-        self.avatarURL = json["avatarUrl"].stringValue
-        self.time = json["time"].stringValue
-        self.imageURL = json["message"].stringValue
-        self.identifier = MessageCellIdentifiers(rawValue: json["identifier"].stringValue)
     }
     
     func getIdentifier() -> MessageCellIdentifiers {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseStorage
 
 extension UIImage {
     func resize(size: CGSize) -> UIImage {

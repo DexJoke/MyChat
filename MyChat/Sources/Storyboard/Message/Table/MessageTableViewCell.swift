@@ -9,7 +9,7 @@
 import UIKit
 
 class MessageTableViewCell: UITableViewCell {
-    func fillData(data: BaseMessageModel) {
+    func fillData(data: BaseMessageModel, completion: @escaping () -> Void) {
         //overrider
     }
 }

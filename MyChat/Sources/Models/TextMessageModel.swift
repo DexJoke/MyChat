@@ -9,27 +9,20 @@
 import UIKit
 import SwiftyJSON
 
-class TextMessageModel: BaseMessageModel, JsonParse {
+class TextMessageModel: BaseMessageModel {
     var receiverName: String!
     var avatarURL: String!
     var bgMessage: String!
     var time: String!
-    var message: String!
+    var data: String!
     var identifier: MessageCellIdentifiers!
-    
-    required init(json: JSON) {
-        self.receiverName = json["receiverName"].stringValue
-        self.avatarURL = json["avatarUrl"].stringValue
-        self.time = json["time"].stringValue
-        self.message = json["message"].stringValue
-        self.identifier = MessageCellIdentifiers(rawValue: json["identifier"].stringValue)
-    }
+    var type: MessageType!
     
     init(json: JSON, identifier: MessageCellIdentifiers) {
-        self.receiverName = json["receiverName"].stringValue
+        self.receiverName = json["sender"]["name"].stringValue
         self.avatarURL = json["avatarUrl"].stringValue
         self.time = json["time"].stringValue
-        self.message = json["message"].stringValue
+        self.data = json["data"].stringValue
         self.identifier = identifier
     }
     

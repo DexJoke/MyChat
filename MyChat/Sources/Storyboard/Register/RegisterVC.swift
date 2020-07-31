@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RegisterVC: BaseVC {
+class RegisterVC: SelectImageVC {
     @IBOutlet weak var editUserName: UITextField!
     @IBOutlet weak var editPassword: UITextField!
     @IBOutlet weak var editConfirmPassword: UITextField!
@@ -16,7 +16,7 @@ class RegisterVC: BaseVC {
     
     override var titleNavigation: String { return "Register" }
     private var presenter: RegisterPresenter!
-    private var pickerImage: PickerImageManager!
+    private var uploadImageManager: StorageImageManager!
     
     static func create() -> RegisterVC {
         return ViewUtils.loadStoryboardVC(storyboard: "Register", identifier: "RegisterVC")
@@ -25,7 +25,16 @@ class RegisterVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter = RegisterPresenter(delegate: self)
-        pickerImage = PickerImageManager(delegate: self)
+        uploadImageManager = StorageImageManager(delegate: self)
+    }
+    
+    override func onSelectImageSuccess(image: UIImage) {
+        uploadImageManager.upload(image: image, path: .avatars)
+        imgAvatar.image = image.resize(size: CGSize(width: 100, height: 100))
+    }
+    
+    override func onSelectImageFailed() {
+        
     }
     
     @IBAction func handleRegister(_ sender: Any) {
@@ -47,11 +56,11 @@ class RegisterVC: BaseVC {
         let alert = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { action in
-            self.pickerImage.photoGalleryAsscessRequest()
+            self.selectImageFromGallery()
         }))
         
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { action in
-            self.pickerImage.cameraAsscessRequest()
+            self.selectImageFromCamera()
         }))
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -88,27 +97,17 @@ extension RegisterVC: RegisterPresenterDelegate {
     }
 }
 
-extension RegisterVC: PickerImageDelegate {
-    func canUseCamera(accessIsAllowed: Bool) {
-        if accessIsAllowed {
-            pickerImage.present(parent: self, sourceType: .camera)
-        }
+extension RegisterVC: StorageImageDelegate {
+    func onStartUpLoad() {
+        showLoading()
     }
     
-    func canUseGallery(accessIsAllowed: Bool) {
-        if accessIsAllowed {
-            pickerImage.present(parent: self, sourceType: .photoLibrary)
-        }
+    func onUpLoadSuccess(imageURL: String) {
+        hideLoading()
+        print(imageURL)
     }
     
-    func didSelect(image: UIImage) {
-        self.pickerImage.dismiss()
-        imgAvatar.image = image.resize(size: CGSize(width: 100, height: 100))
+    func onUpLoadFailed(error: String) {
         
     }
-    
-    func didCancle() {
-        print("didCancle")
-    }
-    
 }

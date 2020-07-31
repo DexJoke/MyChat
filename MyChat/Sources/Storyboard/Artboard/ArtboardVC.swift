@@ -9,7 +9,6 @@
 import UIKit
 import FBSDKLoginKit
 import GoogleSignIn
-import MIBlurPopup
 
 enum ButtonLogin: Int {
     case Login
@@ -27,7 +26,17 @@ class ArtboardVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad")
         artboardPresenter = ArtboardPresenter(delegate: self)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("viewWillAppear")
+        print(buttonLoginContainer)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print("viewDidAppear")
     }
     
     @IBAction func onClick(_ sender: UIButton) {
@@ -46,6 +55,8 @@ class ArtboardVC: BaseVC {
             break
         case ButtonLogin.Register.rawValue:
             pushVC(vc: RegisterVC.create())
+//            pushVC(vc: MessageVC.create())
+
             break
         default: break
         }
@@ -60,7 +71,7 @@ extension ArtboardVC: ArtboardPresenterDelegate {
     }
     
     func onLoginFail(error: String) {
-        SimpleAlert(title: "Thông báo lỗi", content: "Login thất bại").show(vc: self)
+        SimpleAlert(title: "Thông báo lỗi", content: "Login thất bại \(error)").show(vc: self)
         hideLoading()
     }
     

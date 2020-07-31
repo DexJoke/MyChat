@@ -26,7 +26,7 @@ class ArtboardPresenter: NSObject {
     init(delegate: ArtboardPresenterDelegate) {
         self.delegate = delegate
     }
-    
+
     public func facebookLogin() {
         guard let vc = delegate as? UIViewController else {
             return

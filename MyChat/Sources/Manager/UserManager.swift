@@ -9,37 +9,51 @@
 import Foundation
 
 class UserManager {
+    private let LOGIN = "login"
+    private let NAME = "name"
+    private let AVATAR_URL = "avatarURL"
+    private let GMAIL = "gmail"
+    private let ID = "id"
+    
     static let instance  = UserManager()
     
+    func saveId(id: String) {
+        UserDefaults.standard.set(true, forKey: ID)
+    }
+    
+    func getId() -> String {
+        return UserDefaults.standard.string(forKey: ID) ?? ""
+    }
+    
     func isLogin() -> Bool {
-        return UserDefaults.standard.bool(forKey: UserDefaultKey.login)
+        return UserDefaults.standard.bool(forKey: LOGIN)
     }
     
     func logged() {
-        UserDefaults.standard.set(true, forKey: UserDefaultKey.login)
+        UserDefaults.standard.set(true, forKey: LOGIN)
     }
     
     func logout() {
-        UserDefaults.standard.removeObject(forKey: UserDefaultKey.login)
+        UserDefaults.standard.removeObject(forKey: LOGIN)
     }
     
     func saveUserName(_ name: String) {
-        UserDefaults.standard.set(name, forKey:  UserDefaultKey.name)
+        UserDefaults.standard.set(name, forKey:  NAME)
     }
     
     func getUserName() -> String {
-        return UserDefaults.standard.string(forKey: UserDefaultKey.name) ?? ""
+        return UserDefaults.standard.string(forKey: NAME) ?? ""
     }
     
     func saveAvatarUrl(_ url: String) {
-        UserDefaults.standard.set(url, forKey:  UserDefaultKey.avatarURL)
+        UserDefaults.standard.set(url, forKey:  AVATAR_URL)
     }
     
     func getAvatarUrl() -> String {
-        return UserDefaults.standard.string(forKey: UserDefaultKey.avatarURL) ?? ""
+        return UserDefaults.standard.string(forKey: AVATAR_URL) ?? ""
     }
     
     func sameUserName(_ name: String) -> Bool {
-        return UserDefaults.standard.string(forKey: UserDefaultKey.name) == name
+        return getUserName() == name
     }
 }

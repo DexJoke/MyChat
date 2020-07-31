@@ -13,10 +13,10 @@ class SenderTextMessageViewCell: MessageTableViewCell {
     @IBOutlet weak var bgMessage: UIImageView!
     @IBOutlet weak var imgAvatar: UIImageView!
     
-    override func fillData(data: BaseMessageModel) {
+    override func fillData(data: BaseMessageModel, completion: @escaping () -> Void) {
         guard let model = data as? TextMessageModel else {
             return
         }
-        txtMessage.text = model.message
+        txtMessage.text = model.data
     }
 }
